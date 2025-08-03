@@ -1,5 +1,8 @@
 import { Response, Request, NextFunction } from "express";
 import User from "../models/User";
+import jwt from "jsonwebtoken";
+import { config } from "dotenv";
+config();
 
 export const registerUser = async (
   req: Request,
@@ -44,11 +47,16 @@ export const loginUser = async (
       res.status(401).json({ message: "Invalid email or password" });
       return;
     }
+    const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET!, {
+      expiresIn: "30d",
+    });
+
     res.status(200).json({
       _id: user._id,
       name: user.name,
       email: user.email,
       msg: "Login successful",
+      token,
     });
   } catch (error) {
     next(error);

@@ -12,6 +12,7 @@ export const protect = (req: any, res: Response, next: NextFunction) => {
       userId: string;
     };
     req.userId = decoded.userId;
+
     next();
   } catch (err) {
     return res.status(401).json({ message: "Token is not valid" });
