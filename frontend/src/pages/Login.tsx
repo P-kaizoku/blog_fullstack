@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Login: React.FC = () => {
@@ -7,18 +7,26 @@ const Login: React.FC = () => {
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/blogs");
+    }
+  }, [navigate]);
+
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
 
     try {
-      const response = await fetch("http://localhost:5000/api/login", {
+      const response = await fetch("http://localhost:3000/api/auth/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ email, password }),
       });
+      console.log(response);
 
       if (!response.ok) {
         throw new Error("Invalid credentials");
@@ -26,7 +34,7 @@ const Login: React.FC = () => {
 
       const data = await response.json();
       localStorage.setItem("token", data.token);
-      navigate("/dashboard"); // Redirect to dashboard or another page
+      navigate("/blogs"); // Redirect to dashboard or another page
     } catch (err: any) {
       setError(err.message);
     }

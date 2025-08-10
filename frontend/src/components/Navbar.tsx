@@ -1,11 +1,17 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Navbar = () => {
   const [loggedIn, setLoggedIn] = useState(
     () => !!localStorage.getItem("token")
   );
+
   const navigate = useNavigate();
+  // Update loggedIn state when the token changes
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setLoggedIn(!!token);
+  }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("token");
@@ -13,7 +19,7 @@ const Navbar = () => {
     navigate("/");
   };
   return (
-    <nav className="bg-red-50 w-full flex justify-between p-4 border-black border-b-1 sticky top-0 z-50">
+    <nav className="bg-[#f5f5f5] w-full flex justify-between p-4 border-black border-b-1 sticky top-0 z-50">
       <div>
         <h1
           onClick={() => {
@@ -41,7 +47,12 @@ const Navbar = () => {
               </button>
             </li>
             <li>
-              <button className="primary_btn">My Profile</button>
+              <button
+                onClick={() => navigate("/dashboard")}
+                className="primary_btn"
+              >
+                My Profile
+              </button>
             </li>
           </>
         ) : (

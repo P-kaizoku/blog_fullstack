@@ -1,14 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const Signup: React.FC = () => {
   const [formData, setFormData] = useState({
-    username: "",
+    name: "",
     email: "",
     password: "",
   });
+
   const [error, setError] = useState("");
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      navigate("/blogs");
+    }
+  }, [navigate]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -20,7 +28,19 @@ const Signup: React.FC = () => {
     setError("");
 
     try {
-      // Simulate API call for signup
+      const response = await fetch("http://localhost:3000/api/auth/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(formData),
+      });
+
+      if (!response.ok) {
+        console.log(response);
+        throw new Error("Failed to sign up");
+      }
+
       console.log("User signed up:", formData);
       navigate("/login"); // Redirect to login page
     } catch (err) {
@@ -38,9 +58,9 @@ const Signup: React.FC = () => {
           </label>
           <input
             type="text"
-            id="username"
-            name="username"
-            value={formData.username}
+            id="name"
+            name="name"
+            value={formData.name}
             onChange={handleChange}
             className="input_field"
             required
@@ -72,6 +92,7 @@ const Signup: React.FC = () => {
             onChange={handleChange}
             className="input_field"
             required
+            minLength={6}
           />
         </div>
         {error && <p className="error">{error}</p>}

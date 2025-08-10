@@ -31,7 +31,9 @@ export const getBlogs = async (
   next: NextFunction
 ) => {
   try {
-    const blogs = await Blog.find();
+    const blogs = await Blog.find()
+      .populate("author", "name email")
+      .populate("likes", "name");
     res.status(200).json(blogs);
   } catch (error) {
     next(error);
@@ -45,7 +47,9 @@ export const getBlogById = async (
 ) => {
   const { id } = req.params;
   try {
-    const blog = await Blog.findById(id);
+    const blog = await Blog.findById(id)
+      .populate("author", "name email")
+      .populate("likes", "name");
     if (!blog) {
       return res.status(404).json({ message: "Blog not found" });
     }

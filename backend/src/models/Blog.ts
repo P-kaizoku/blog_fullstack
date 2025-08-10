@@ -4,7 +4,7 @@ export interface IBlog extends Document {
   title: string;
   content: string;
   thumbnailUrl?: string;
-  category: string;
+  category?: string;
   author: mongoose.Types.ObjectId;
   likes: mongoose.Types.ObjectId[];
 }

@@ -6,10 +6,11 @@ import BlogDetails from "./pages/BlogDetails";
 import WriteBlogs from "./pages/BlogEdior";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
+import Dashboard from "./pages/Dashboard";
 
 const App = () => {
   return (
-    <main className="flex flex-col items-center bg-red-50 min-h-screen cursor-default">
+    <main className="flex flex-col items-center bg-[#f5f5f5] min-h-screen cursor-default">
       <Router>
         <Navbar />
         <Routes>
@@ -19,6 +20,7 @@ const App = () => {
           <Route path="/write" element={<WriteBlogs />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/dashboard" element={<Dashboard />} />
         </Routes>
       </Router>
     </main>
