@@ -1,26 +1,28 @@
 import { useEffect, useState } from "react";
-
-
-type Blog = {
-  id: number;
-  title: string;
-  content: string;
-  author?: { id: string; name: string; email: string };
-};
+import BlogCard from "../components/BlogCard";
+import type { IBlogClient } from "../types/blogcard";
+import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
-  const [blogs, setBlogs] = useState<Blog[]>([]);
-  const decoded = localStorage.getItem("token");
-  const userId = decoded ? JSON.parse(decoded).id : null;
+  const [blogs, setBlogs] = useState<IBlogClient[]>([]);
+  const userId = localStorage.getItem("userId");
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/blogs");
-        const data: Blog[] = await response.json();
+        const response = await fetch(
+          `http://localhost:3000/api/blogs/user/${userId}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          }
+        );
+        const data: IBlogClient[] = await response.json();
         console.log("Fetched blogs:", data);
-        const myBlogs = data.filter((blog) => blog.author?.id === userId);
-        setBlogs(myBlogs);
+
+        setBlogs(data);
       } catch (error) {
         console.error("Error fetching blogs:", error);
       }
@@ -38,11 +40,17 @@ const Dashboard = () => {
         <h3 className="text-xl font-medium tracking-wide">Your Blog Posts</h3>
       </section>
       <section className="w-full p-4">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="">
           {blogs.map((blog) => (
-            <div key={blog.id} className="border p-4 rounded">
-              <h4 className="font-semibold">{blog.title}</h4>
-              <p className="text-sm">{blog.content}</p>
+            <div onClick={() => navigate(`/blogs/${blog._id}`)} key={blog._id}>
+              <BlogCard
+                title={blog.title}
+                content={blog.content}
+                author={blog.author?.name ?? `Author ${blog._id}`}
+                thumbnailUrl={blog.thumbnailUrl}
+                createdAt={blog.createdAt}
+                category={blog.category}
+              />
             </div>
           ))}
         </div>

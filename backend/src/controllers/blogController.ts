@@ -40,6 +40,25 @@ export const getBlogs = async (
   }
 };
 
+export const getUserBlogs = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  const { userId } = req.params;
+  try {
+    const blogs = await Blog.find({ author: userId })
+      .populate("author", "name email")
+      .populate("likes", "name");
+    if (!blogs || blogs.length === 0) {
+      return res.status(404).json({ message: "No blogs found for this user" });
+    }
+    res.status(200).json(blogs);
+  } catch (error) {
+    next(error);
+  }
+};
+
 export const getBlogById = async (
   req: Request,
   res: Response,

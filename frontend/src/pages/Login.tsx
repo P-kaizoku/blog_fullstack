@@ -26,14 +26,16 @@ const Login: React.FC = () => {
         },
         body: JSON.stringify({ email, password }),
       });
-      console.log(response);
+      // console.log(response);
 
       if (!response.ok) {
         throw new Error("Invalid credentials");
       }
 
       const data = await response.json();
+      console.log("Login successful:", data);
       localStorage.setItem("token", data.token);
+      localStorage.setItem("userId", data._id);
       navigate("/blogs"); // Redirect to dashboard or another page
     } catch (err: any) {
       setError(err.message);

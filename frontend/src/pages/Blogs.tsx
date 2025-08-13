@@ -1,18 +1,8 @@
 import BlogCard from "../components/BlogCard";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
+import type { IBlogClient } from "../types/blogcard";
 
-export interface IBlogClient {
-  _id: string;
-  title: string;
-  content: string;
-  thumbnailUrl?: string;
-  category?: string;
-  author?: { _id: string; name: string; email: string }; // id as string
-  likes?: { _id: string; name: string }[];
-  createdAt?: string; // ya Date, tum parse karo to Date
-  updatedAt?: string;
-}
 const Blogs = () => {
   const fakeBlogs: IBlogClient[] = [
     {

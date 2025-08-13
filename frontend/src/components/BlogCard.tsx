@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 interface BlogCardProps {
   title: string;
@@ -27,6 +28,32 @@ const BlogCard: React.FC<BlogCardProps> = ({
 
   const previewLength = 200;
   const isLong = textOnly.length > previewLength;
+  const navigate = useNavigate();
+
+  const handleDelete = async (_id: string): Promise<void> => {
+    if (window.confirm("Are you sure you want to delete this blog?")) {
+      try {
+        const response = await fetch(`http://localhost:3000/api/blogs/${_id}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        });
+
+        if (response.ok) {
+          setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog._id !== _id));
+          alert("Blog deleted successfully.");
+        } else {
+          const errorData = await response.json();
+          console.error("Error deleting blog:", errorData);
+          alert("Failed to delete the blog.");
+        }
+      } catch (error) {
+        console.error("Error deleting blog:", error);
+        alert("An error occurred while deleting the blog.");
+      }
+    }
+  };
 
   return (
     <div className="blog-card flex flex-row-reverse justify-between">
@@ -89,6 +116,11 @@ const BlogCard: React.FC<BlogCardProps> = ({
             {expanded ? "Show Less" : "Read More"}
           </button>
         )}
+
+        <button onClick={() => navigate(`/blogs/edit/${blog._id}`)}>
+          Edit
+        </button>
+        <button onClick={() => handleDelete(blog._id)}>Delete</button>
       </div>
     </div>
   );

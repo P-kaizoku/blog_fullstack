@@ -40,7 +40,14 @@ const BlogDetails = () => {
 
   return (
     <div className="w-full p-4">
-      <h1 className="text-6xl font-bold text-neutral-800 mb-4">{blog.title}</h1>
+      <h2 className="text-3xl font-semibold my-4">{blog.title}</h2>
+      {blog.thumbnailUrl && (
+        <img
+          src={blog.thumbnailUrl}
+          alt={blog.title}
+          className="w-[200px] rounded-lg"
+        />
+      )}
       <p className="text-sm text-neutral-600 ml-3">By {blog.author?.name}</p>
       <div
         className="mt-4 text-lg"
