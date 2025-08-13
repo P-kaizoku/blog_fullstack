@@ -39,8 +39,10 @@ const Blogs = () => {
     const fetchBlogs = async () => {
       try {
         const response = await fetch("http://localhost:3000/api/blogs");
+
         if (!response.ok) throw new Error("Network error");
         const data: IBlogClient[] = await response.json();
+        console.log("Fetched blogs:", data);
         setBlogs(data);
       } catch (error) {
         console.error("Error fetching blogs:", error);
@@ -57,11 +59,18 @@ const Blogs = () => {
     <div>
       {/* <h1>Blogs</h1> */}
       {blogs.map((blog) => (
-        <div key={blog._id} onClick={() => navigate(`/blogs/${blog._id}`)}>
+        <div
+          key={blog._id}
+          className=""
+          onClick={() => navigate(`/blogs/${blog._id}`)}
+        >
           <BlogCard
             title={blog.title}
             content={blog.content}
             author={blog.author?.name ?? `Author ${blog._id}`}
+            thumbnailUrl={blog.thumbnailUrl}
+            createdAt={blog.createdAt}
+            category={blog.category}
           />
         </div>
       ))}

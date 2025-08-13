@@ -24,6 +24,10 @@
   @apply text-sm font-semibold text-zinc-700/80 mb-1;
 }
 
+.blog-card {
+  @apply min-w-3xl max-w-4xl bg-white shadow-md  p-4 border-b-1 border-b-neutral-700;
+}
+
 @theme {
   --font-family-satoshi: "Satoshi", sans-serif;
 }

@@ -4,9 +4,19 @@ interface BlogCardProps {
   title: string;
   content: string;
   author: string;
+  thumbnailUrl?: string;
+  createdAt?: string;
+  category?: string;
 }
 
-const BlogCard: React.FC<BlogCardProps> = ({ title, content, author }) => {
+const BlogCard: React.FC<BlogCardProps> = ({
+  title,
+  content,
+  author,
+  thumbnailUrl,
+  createdAt,
+  category,
+}) => {
   const [expanded, setExpanded] = useState(false);
 
   // Remove empty <p> tags
@@ -19,62 +29,67 @@ const BlogCard: React.FC<BlogCardProps> = ({ title, content, author }) => {
   const isLong = textOnly.length > previewLength;
 
   return (
-    <div
-      className="blog-card"
-      style={{
-        border: "1px solid #ddd",
-        padding: "1rem",
-        marginBottom: "1rem",
-        borderRadius: "8px",
-        cursor: "pointer",
-        background: "#fff",
-        boxShadow: "0 2px 6px rgba(0,0,0,0.05)",
-      }}
-    >
-      <h2 style={{ margin: "0 0 0.5rem" }}>{title}</h2>
-      <small
-        style={{
-          display: "block",
-          marginBottom: "0.5rem",
-          color: "#666",
-          fontStyle: "italic",
-        }}
-      >
-        By {author}
-      </small>
+    <div className="blog-card flex flex-row-reverse justify-between">
+      <div>
+        {thumbnailUrl && (
+          <img
+            width={300}
+            src={thumbnailUrl}
+            alt={title}
+            className=" h-auto rounded-md mb-4"
+          />
+        )}
+      </div>
+      <div>
+        <h2 className="text-[48px] font-semibold tracking-tight leading-[50px]">
+          {title}
+        </h2>
+        <small className="text-[12px] text-gray-500 tracking-wide">
+          By {author}{" "}
+          {createdAt && ` | ${new Date(createdAt).toLocaleDateString()}`}
+        </small>
+        {category && (
+          <p className="text-[10px] bg-red-50 w-fit rounded-lg px-2 my-2  border-1 border-red-100 font-semibold text-gray-700 shadow-xl mt-1 uppercase">
+            {category}
+          </p>
+        )}
 
-      {expanded ? (
-        <div
-          className="blog-content"
-          style={{ color: "#333", lineHeight: "1.6" }}
-          dangerouslySetInnerHTML={{ __html: cleanContent }}
-        />
-      ) : (
-        <p style={{ color: "#333", lineHeight: "1.6" }}>
-          {textOnly.slice(0, previewLength)}
-          {isLong && "..."}
-        </p>
-      )}
+        {expanded ? (
+          <div
+            className="text-[16px] mt-4"
+            style={{ color: "#333", lineHeight: "1.6" }}
+            dangerouslySetInnerHTML={{ __html: cleanContent }}
+          />
+        ) : (
+          <p
+            style={{ lineHeight: "1.6" }}
+            className="text-[18px] font-sans tracking-wide text-neutral-500 mt-4 italic"
+          >
+            {textOnly.slice(0, previewLength)}
+            {isLong && "..."}
+          </p>
+        )}
 
-      {isLong && (
-        <button
-          onClick={(e) => {
-            e.stopPropagation(); // Prevent triggering blog navigation
-            setExpanded(!expanded);
-          }}
-          style={{
-            marginTop: "0.5rem",
-            background: "none",
-            border: "none",
-            color: "#0070f3",
-            cursor: "pointer",
-            padding: 0,
-            fontSize: "0.9rem",
-          }}
-        >
-          {expanded ? "Show Less" : "Read More"}
-        </button>
-      )}
+        {isLong && (
+          <button
+            onClick={(e) => {
+              e.stopPropagation(); // Prevent triggering blog navigation
+              setExpanded(!expanded);
+            }}
+            style={{
+              marginTop: "0.5rem",
+              background: "none",
+              border: "none",
+              color: "#0070f3",
+              cursor: "pointer",
+              padding: 0,
+              fontSize: "0.9rem",
+            }}
+          >
+            {expanded ? "Show Less" : "Read More"}
+          </button>
+        )}
+      </div>
     </div>
   );
 };

@@ -8,7 +8,7 @@ export const createBlog = async (
   res: Response,
   next: NextFunction
 ) => {
-  const { title, content } = req.body;
+  const { title, content, thumbnailUrl } = req.body;
   const userId = req.userId; // Assuming userId is set by the protect middleware
   const user = await User.findById(userId);
 
@@ -17,7 +17,7 @@ export const createBlog = async (
   }
 
   try {
-    const newBlog = new Blog({ title, content, author: userId });
+    const newBlog = new Blog({ title, content, author: userId, thumbnailUrl });
     await newBlog.save();
     res.status(201).json(newBlog);
   } catch (error) {
