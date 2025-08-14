@@ -7,6 +7,7 @@ import WriteBlogs from "./pages/BlogEdior";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import Dashboard from "./pages/Dashboard";
+import EditBlog from "./pages/EditBlog";
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/blogs/edit/:id" element={<EditBlog />} />
         </Routes>
       </Router>
     </main>
