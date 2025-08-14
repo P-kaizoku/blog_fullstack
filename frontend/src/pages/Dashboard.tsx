@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import BlogCard from "../components/BlogCard";
 import type { IBlogClient } from "../types/blogcard";
-import { useNavigate } from "react-router-dom";
 
 const Dashboard = () => {
   const [blogs, setBlogs] = useState<IBlogClient[]>([]);
   const userId = localStorage.getItem("userId");
-  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -42,7 +40,7 @@ const Dashboard = () => {
       <section className="w-full p-4">
         <div className="">
           {blogs.map((blog) => (
-            <div onClick={() => navigate(`/blogs/${blog._id}`)} key={blog._id}>
+            <div key={blog._id}>
               <BlogCard
                 title={blog.title}
                 content={blog.content}
@@ -50,6 +48,8 @@ const Dashboard = () => {
                 thumbnailUrl={blog.thumbnailUrl}
                 createdAt={blog.createdAt}
                 category={blog.category}
+                setBlogs={setBlogs}
+                id={blog._id}
               />
             </div>
           ))}

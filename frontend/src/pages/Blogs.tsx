@@ -1,4 +1,4 @@
-import BlogCard from "../components/BlogCard";
+import BlogCardDashboard from "../components/BlogCardDashboard";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import type { IBlogClient } from "../types/blogcard";
@@ -54,13 +54,14 @@ const Blogs = () => {
           className=""
           onClick={() => navigate(`/blogs/${blog._id}`)}
         >
-          <BlogCard
+          <BlogCardDashboard
             title={blog.title}
             content={blog.content}
             author={blog.author?.name ?? `Author ${blog._id}`}
             thumbnailUrl={blog.thumbnailUrl}
             createdAt={blog.createdAt}
             category={blog.category}
+            id={blog._id}
           />
         </div>
       ))}

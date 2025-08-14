@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import type { IBlogClient } from "../types/blogcard";
 
 interface BlogCardProps {
   title: string;
@@ -9,18 +8,16 @@ interface BlogCardProps {
   thumbnailUrl?: string;
   createdAt?: string;
   category?: string;
-  setBlogs: React.Dispatch<React.SetStateAction<IBlogClient[]>>;
   id: string;
 }
 
-const BlogCard: React.FC<BlogCardProps> = ({
+const BlogCardDashboard: React.FC<BlogCardProps> = ({
   title,
   content,
   author,
   thumbnailUrl,
   createdAt,
   category,
-  setBlogs,
   id,
 }) => {
   const [expanded, setExpanded] = useState(false);
@@ -35,34 +32,9 @@ const BlogCard: React.FC<BlogCardProps> = ({
   const isLong = textOnly.length > previewLength;
   const navigate = useNavigate();
 
-  const handleDelete = async (_id: string): Promise<void> => {
-    if (window.confirm("Are you sure you want to delete this blog?")) {
-      try {
-        const response = await fetch(`http://localhost:3000/api/blogs/${_id}`, {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-
-        if (response.ok) {
-          setBlogs((prevBlogs) => prevBlogs.filter((blog) => blog._id !== _id));
-          alert("Blog deleted successfully.");
-        } else {
-          const errorData = await response.json();
-          console.error("Error deleting blog:", errorData);
-          alert("Failed to delete the blog.");
-        }
-      } catch (error) {
-        console.error("Error deleting blog:", error);
-        alert("An error occurred while deleting the blog.");
-      }
-    }
-  };
-
   return (
     <div className="blog-card flex flex-row-reverse justify-between">
-      <div>
+      <div onClick={() => navigate(`/blogs/${id}`)}>
         {thumbnailUrl && (
           <img
             width={300}
@@ -121,30 +93,9 @@ const BlogCard: React.FC<BlogCardProps> = ({
             {expanded ? "Show Less" : "Read More"}
           </button>
         )}
-
-        <div className="flex space-x-2 mt-40">
-          <button
-            className="secondary_btn text-white px-4 py-2 rounded"
-            onClick={() => navigate(`/blogs/edit/${id}`)}
-          >
-            Edit
-          </button>
-          <button
-            className="cautionary_btn text-white px-4 py-2 rounded "
-            onClick={() => handleDelete(id)}
-          >
-            Delete
-          </button>
-          <button
-            className="primary_btn px-4 py-2 rounded"
-            onClick={() => navigate(`/blogs/${id}`)}
-          >
-            View
-          </button>
-        </div>
       </div>
     </div>
   );
 };
 
-export default BlogCard;
+export default BlogCardDashboard;
